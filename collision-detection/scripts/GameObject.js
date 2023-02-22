@@ -11,6 +11,7 @@ export default class GameObject extends PIXI.Sprite {
         this.jumpHeight = 4;
         this.gravity = 5;
         this.maxYSpeed = 3;
+        this.canCollide = true;
         // this.outlineFilterRed = new filters.GlowFilter();
         this.outlineFilterHide = new filters.DropShadowFilter();
 
@@ -35,9 +36,10 @@ export default class GameObject extends PIXI.Sprite {
 
                 break;
             case 'KeyF':
-                console.log('hiding');
-                this.outlineFilterHide.shadowOnly = state ==0?false:true;
+                this.canCollide = state ==0?true:false;
+                this.outlineFilterHide.shadowOnly = !this.canCollide;
                 this.filters = [this.outlineFilterHide];
+                console.log(this.canCollide);
                 break;
         }
     }
@@ -63,6 +65,7 @@ export default class GameObject extends PIXI.Sprite {
 
         this.accel.x = this.accel.x - 0.1 * this.accel.x;
     }
+    //TODO: @tarang-soni fix invisibility snap issue, player snaps outside if invisible button is released while inside an obstacle
     AABBCollision(other) {
         let bounds1 = this.getBounds();
         let bounds2 = other.getBounds();
@@ -71,11 +74,12 @@ export default class GameObject extends PIXI.Sprite {
         let bottom = bounds1.y - (bounds2.y + bounds2.height);
         let left = bounds2.x - (bounds1.x + bounds1.width);
         let right = bounds1.x - (bounds2.x + bounds2.width);
+        
 
         return (top < 0 && bottom < 0 && left < 0 && right < 0);
     }
     checkCollision(other) {
-
+        if(!this.canCollide) return;
         let bounds1 = this.getBounds();
         let bounds2 = other.getBounds();
 
