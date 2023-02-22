@@ -12,6 +12,8 @@ export default class Game extends PIXI.Container {
 
         document.addEventListener('keydown', (e)=>this.CheckKeyDown(e));
         document.addEventListener('keyup', (e)=>this.CheckKeyUp(e));
+        this.camera = new PIXI.Container(); 
+        this.addChild(this.camera);
         this.drawGUI();
 
 
@@ -22,7 +24,7 @@ export default class Game extends PIXI.Container {
 
         this.xAxisLine.lineStyle(1, 0xffffff)
             .moveTo(-Data.SCREEN_WIDTH / 2, 0).lineTo(Data.SCREEN_WIDTH, 0);
-        this.addChild(this.xAxisLine);
+        this.camera.addChild(this.xAxisLine);
 
         this.xAxisLine.alpha = 0.2;
 
@@ -31,23 +33,20 @@ export default class Game extends PIXI.Container {
 
         this.yAxisLine.lineStyle(1, 0xffffff)
             .moveTo(0, -Data.SCREEN_HEIGHT / 2).lineTo(0, Data.SCREEN_HEIGHT);
-        this.addChild(this.yAxisLine);
+        this.camera.addChild(this.yAxisLine);
 
         this.yAxisLine.alpha = 0.2;
     }
 
     Start() {
         this.bunny = new GameObject("../Assets/bunny.png");
-
-        this.addChild(this.bunny);
+        this.camera.addChild(this.bunny);
 
         this.bunny.anchor.set(0.5);
 
-        this.platform = new PIXI.Graphics();
-        this.platform.beginFill(0xfee00f);
-        this.platform.drawRect(-Data.SCREEN_WIDTH / 2 + 100, Data.SCREEN_HEIGHT / 2 - 100, Data.SCREEN_WIDTH - 200, Data.SCREEN_HEIGHT / 2);
-        this.platform.endFill();
-
+        this.camera.position.set(0);
+        this.camera.pivot.x= this.bunny.position.x;
+        this.camera.pivot.y= this.bunny.position.y;
         // this.addChild(this.platform);
         this.drawLevel();
     }
@@ -84,13 +83,17 @@ export default class Game extends PIXI.Container {
             }
             
         }
-        this.addChild(this.mapContainer);
+        this.camera.addChild(this.mapContainer);
         this.mapContainer.position.x = -Data.SCREEN_WIDTH/2;
         this.mapContainer.position.y = -Data.SCREEN_HEIGHT/2;
 
         this.isplayerColliding = false;
     }
     Update(dT) {
+        
+        var targetPos = this.bunny.position;
+        this.camera.pivot.x = (targetPos.x-this.camera.pivot.x)*0.1+this.camera.pivot.x;
+        this.camera.pivot.y = (targetPos.y-this.camera.pivot.y)*0.1+this.camera.pivot.y;
         
         this.bunny.Update(dT);
         this.bunny.isGrounded = false;

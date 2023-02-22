@@ -11,9 +11,10 @@ export default class GameObject extends PIXI.Sprite {
         this.jumpHeight = 4;
         this.gravity = 5;
         this.maxYSpeed = 3;
-        this.outlineFilterRed = new filters.GlowFilter();
+        // this.outlineFilterRed = new filters.GlowFilter();
+        this.outlineFilterHide = new filters.DropShadowFilter();
 
-        this.filters = [this.outlineFilterRed];
+        this.filters = [this.outlineFilterHide];
         this.IsMovePressed = {
             KeyW: false,
             KeyS: false,
@@ -32,6 +33,11 @@ export default class GameObject extends PIXI.Sprite {
             case 'Space':
                 this.IsMovePressed[e.code] = state;
 
+                break;
+            case 'KeyF':
+                console.log('hiding');
+                this.outlineFilterHide.shadowOnly = state ==0?false:true;
+                this.filters = [this.outlineFilterHide];
                 break;
         }
     }
