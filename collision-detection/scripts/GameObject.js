@@ -1,6 +1,6 @@
-import * as PIXI from "../node_modules/pixi.js/dist/pixi.mjs";
 
-
+import * as filters from 'pixi-filters';
+import * as PIXI from 'pixi.js';
 export default class GameObject extends PIXI.Sprite {
 
     constructor(assetPath) {
@@ -8,10 +8,12 @@ export default class GameObject extends PIXI.Sprite {
         this.accel = new PIXI.Point(0);
         this.velocity = new PIXI.Point(0);
         this.speed = 0.3;
-        this.jumpHeight = 1;
+        this.jumpHeight = 4;
         this.gravity = 5;
         this.maxYSpeed = 3;
- 
+        this.outlineFilterRed = new filters.GlowFilter();
+
+        this.filters = [this.outlineFilterRed];
         this.IsMovePressed = {
             KeyW: false,
             KeyS: false,
@@ -19,7 +21,6 @@ export default class GameObject extends PIXI.Sprite {
             KeyD: false,
             Space: false,
         };
-
         this.isGrounded = false;
     }
     CheckInput(e, state) {
@@ -102,7 +103,7 @@ export default class GameObject extends PIXI.Sprite {
                 return false;
             }
         }
-        //fix collision from below
+
     }
     Move(dT) {
         this.velocity.set(0);

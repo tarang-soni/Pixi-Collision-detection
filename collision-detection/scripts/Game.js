@@ -1,4 +1,4 @@
-import * as PIXI from "../node_modules/pixi.js/dist/pixi.mjs";
+import * as PIXI from 'pixi.js';
 import Data from "./Data.js"
 
 import GameObject from "./GameObject.js";
@@ -37,7 +37,7 @@ export default class Game extends PIXI.Container {
     }
 
     Start() {
-        this.bunny = new GameObject("./Assets/bunny.png");
+        this.bunny = new GameObject("../Assets/bunny.png");
 
         this.addChild(this.bunny);
 
