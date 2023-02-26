@@ -17,4 +17,5 @@ game.position.set(app.screen.width / 2, app.screen.height / 2);
 
 app.ticker.add((dT) => {
     game.Update(dT);
+    game.LateUpdate(dT);
 });

@@ -47,6 +47,8 @@ export default class Game extends PIXI.Container {
         this.camera.position.set(0);
         this.camera.pivot.x = this.bunny.position.x;
         this.camera.pivot.y = this.bunny.position.y;
+
+        this.camera.scale.set(1);
         // this.addChild(this.platform);
         this.drawLevel();
     }
@@ -99,10 +101,8 @@ export default class Game extends PIXI.Container {
         this.isplayerColliding = false;
     }
     Update(dT) {
+        
 
-        var targetPos = this.bunny.position;
-        this.camera.pivot.x = (targetPos.x - this.camera.pivot.x) * 0.1 + this.camera.pivot.x;
-        this.camera.pivot.y = (targetPos.y - this.camera.pivot.y) * 0.1 + this.camera.pivot.y;
 
         this.bunny.Update(dT);
         this.bunny.isGrounded = false;
@@ -113,6 +113,12 @@ export default class Game extends PIXI.Container {
 
             }
         }
+    }
+    LateUpdate(dT){
+        var targetPos = this.bunny.position;
+        this.camera.pivot.x = (targetPos.x - this.camera.pivot.x) * dT/10 + this.camera.pivot.x;
+        this.camera.pivot.y = (targetPos.y - this.camera.pivot.y) * dT/20 + this.camera.pivot.y;
+
     }
     InputHandler(e, state) {
         this.bunny.CheckInput(e, state);
